@@ -1,31 +1,24 @@
 public class Either {
 
-    final def value;
+    def left;
+    def right;
 
-    Either(value) {
-        if (value == null) {
-            throw new IllegalArgumentException("Either cannot be null");
-        }
-        this.value = value;
+    public def isLeft(){
+        left as boolean
     }
 
-    Either(defaultValue,value) {
-        this.value = (value == null) ? defaultValue : value;
+    public def isRight(){
+        right as boolean
     }
 
-    public static Either with(value) {
-        return new Either(value);
-    }
-
-    public Either or(value) {
-        return new Either(this.value, value);
-    }
-
-    public def get() {
-        return value;
+    public def value(){
+        isLeft()?left:right
     }
 
     public Either bind(Closure f) {
-        Either.with(f.call(value))
+        if(isLeft()){
+         return f(this.left)
+        }
+        this
     }
 }
